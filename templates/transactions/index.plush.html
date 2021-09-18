@@ -9,13 +9,21 @@
 
 <table class="table table-hover table-bordered">
   <thead class="thead-light">
-    <th>Description</th><th>Amount</th><th>SpenderID</th>
+    <th>Spent on</th>
+    <th>Description</th>
+    <th>Amount</th>
+    <th>Spent by</th>
     <th>&nbsp;</th>
   </thead>
   <tbody>
     <%= for (transaction) in transactions { %>
       <tr>
-        <td class="align-middle"><%= transaction.Description %></td><td class="align-middle"><%= transaction.Amount %></td><td class="align-middle"><%= transaction.SpenderID %></td>
+        <td class="align-middle">
+          <%= transaction.CreatedAt.Format("01/02/2006") %>
+        </td>
+        <td class="align-middle"><%= transaction.Description %></td>
+        <td class="align-middle"><%= transaction.Amount %></td>
+        <td class="align-middle"><%= transaction.Spender.Name %></td>
         <td>
           <div class="float-right">
             <%= linkTo(transactionPath({ transaction_id: transaction.ID }), {class: "btn btn-info", body: "View"}) %>

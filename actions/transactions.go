@@ -43,7 +43,7 @@ func (v TransactionsResource) List(c buffalo.Context) error {
 	q := tx.PaginateFromParams(c.Params())
 
 	// Retrieve all Transactions from the DB
-	if err := q.All(transactions); err != nil {
+	if err := q.EagerPreload("Spender").All(transactions); err != nil {
 		return err
 	}
 

@@ -18,6 +18,8 @@ type Transaction struct {
 	SpenderID   uuid.UUID `json:"spender_id" db:"spender_id"`
 	CreatedAt   time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at" db:"updated_at"`
+
+	Spender Spender `belongs_to:"spenders" json:"spender" db:"-"`
 }
 
 // String is not required by pop and may be deleted
