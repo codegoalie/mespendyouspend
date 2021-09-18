@@ -1,0 +1,6 @@
+- id: "transaction.created.success"
+  translation: "Transaction was successfully created."
+- id: "transaction.updated.success"
+  translation: "Transaction was successfully updated."
+- id: "transaction.destroyed.success"
+  translation: "Transaction was successfully destroyed."

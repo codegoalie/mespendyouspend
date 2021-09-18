@@ -1,0 +1,9 @@
+create_table("transactions") {
+	t.Column("id", "uuid", {primary: true})
+	t.Column("description", "string", {})
+	t.Column("amount", "integer", {})
+	t.Column("spender_id", "uuid", {})
+
+  t.Index(["spender_id", "created_at"])
+	t.Timestamps()
+}

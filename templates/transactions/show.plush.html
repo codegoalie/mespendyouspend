@@ -1,0 +1,38 @@
+<div class="py-4 mb-2">
+  <h3 class="d-inline-block">Transaction Details</h3>
+
+  <div class="float-right">
+    <%= linkTo(transactionsPath(), {class: "btn btn-info"}) { %>
+      Back to all Transactions
+    <% } %>
+    <%= linkTo(editTransactionPath({ transaction_id: transaction.ID }), {class: "btn btn-warning", body: "Edit"}) %>
+    <%= linkTo(transactionPath({ transaction_id: transaction.ID }), {class: "btn btn-danger", "data-method": "DELETE", "data-confirm": "Are you sure?", body: "Destroy"}) %>
+  </div>
+</div>
+
+
+
+<ul class="list-group mb-2 ">
+
+
+  <li class="list-group-item pb-1">
+    <label class="small d-block">Description</label>
+    <p class="d-inline-block"><%= transaction.Description %></p>
+  </li>
+
+
+
+  <li class="list-group-item pb-1">
+    <label class="small d-block">Amount</label>
+    <p class="d-inline-block"><%= transaction.Amount %></p>
+  </li>
+
+
+
+  <li class="list-group-item pb-1">
+    <label class="small d-block">SpenderID</label>
+    <p class="d-inline-block"><%= transaction.SpenderID %></p>
+  </li>
+
+
+</ul>
