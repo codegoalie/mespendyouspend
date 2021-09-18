@@ -1,0 +1,6 @@
+create_table("spenders") {
+	t.Column("id", "uuid", {primary: true})
+	t.Column("email", "string", {})
+	t.Column("name", "string", {})
+	t.Timestamps()
+}
