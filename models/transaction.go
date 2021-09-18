@@ -2,20 +2,22 @@ package models
 
 import (
 	"encoding/json"
+	"time"
+
 	"github.com/gobuffalo/pop/v5"
 	"github.com/gobuffalo/validate/v3"
-	"github.com/gofrs/uuid"
-	"time"
 	"github.com/gobuffalo/validate/v3/validators"
+	"github.com/gofrs/uuid"
 )
+
 // Transaction is used by pop to map your transactions database table to your go code.
 type Transaction struct {
-    ID uuid.UUID `json:"id" db:"id"`
-    Description string `json:"description" db:"description"`
-    Amount int `json:"amount" db:"amount"`
-    SpenderID uuid.UUID `json:"spender_id" db:"spender_id"`
-    CreatedAt time.Time `json:"created_at" db:"created_at"`
-    UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
+	ID          uuid.UUID `json:"id" db:"id"`
+	Description string    `json:"description" db:"description"`
+	Amount      int       `json:"amount" db:"amount"`
+	SpenderID   uuid.UUID `json:"spender_id" db:"spender_id"`
+	CreatedAt   time.Time `json:"created_at" db:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at" db:"updated_at"`
 }
 
 // String is not required by pop and may be deleted
