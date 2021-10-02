@@ -63,28 +63,23 @@ func (v TransactionsResource) List(c buffalo.Context) error {
 // Show gets the data for one Transaction. This function is mapped to
 // the path GET /transactions/{transaction_id}
 func (v TransactionsResource) Show(c buffalo.Context) error {
-	// Get the DB connection from the context
-	tx, ok := c.Value("tx").(*pop.Connection)
-	if !ok {
-		return fmt.Errorf("no transaction found")
-	}
-
-	// Allocate an empty Transaction
-	transaction := &models.Transaction{}
-
-	// To find the Transaction the parameter transaction_id is used.
-	if err := tx.EagerPreload("Spender").Find(transaction, c.Param("transaction_id")); err != nil {
-		return c.Error(http.StatusNotFound, err)
-	}
-
 	return responder.Wants("html", func(c buffalo.Context) error {
-		c.Set("transaction", transaction)
-
-		return c.Render(http.StatusOK, r.HTML("/transactions/show.plush.html"))
+		return c.Redirect(http.StatusSeeOther, "/transactions")
 	}).Wants("json", func(c buffalo.Context) error {
+		// Get the DB connection from the context
+		tx, ok := c.Value("tx").(*pop.Connection)
+		if !ok {
+			return fmt.Errorf("no transaction found")
+		}
+
+		// Allocate an empty Transaction
+		transaction := &models.Transaction{}
+
+		// To find the Transaction the parameter transaction_id is used.
+		if err := tx.EagerPreload("Spender").Find(transaction, c.Param("transaction_id")); err != nil {
+			return c.Error(http.StatusNotFound, err)
+		}
 		return c.Render(200, r.JSON(transaction))
-	}).Wants("xml", func(c buffalo.Context) error {
-		return c.Render(200, r.XML(transaction))
 	}).Respond(c)
 }
 
@@ -143,7 +138,7 @@ func (v TransactionsResource) Create(c buffalo.Context) error {
 		c.Flash().Add("success", T.Translate(c, "transaction.created.success"))
 
 		// and redirect to the show page
-		return c.Redirect(http.StatusSeeOther, "/transactions/%v", transaction.ID)
+		return c.Redirect(http.StatusSeeOther, "/transactions")
 	}).Wants("json", func(c buffalo.Context) error {
 		return c.Render(http.StatusCreated, r.JSON(transaction))
 	}).Wants("xml", func(c buffalo.Context) error {
