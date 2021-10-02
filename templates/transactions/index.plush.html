@@ -22,9 +22,9 @@
           <% } %>
         </td>
         <td class="align-middle">
-            <%= transaction.Description %>
+          <%= transaction.Description %>
           <br/>
-            &mdash; <%= displayName(transaction.Spender) %>
+          <i>&mdash; <%= displayName(transaction.Spender) %></i>
         </td>
         <td class="align-middle text-right"><%= asCurrency(transaction.Amount) %></td>
       </tr>
