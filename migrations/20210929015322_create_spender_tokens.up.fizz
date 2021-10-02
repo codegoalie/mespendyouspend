@@ -1,0 +1,9 @@
+create_table("spender_tokens") {
+	t.Column("id", "uuid", {primary: true})
+	t.Column("spender_id", "uuid", {})
+	t.Column("token", "string", { unique: true, size: 75 })
+	t.Column("expires_at", "timestamp", {})
+
+  t.Index("token",  { unique: true })
+	t.Timestamps()
+}

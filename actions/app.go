@@ -62,11 +62,22 @@ func App() *buffalo.App {
 		app.Use(translations())
 
 		app.GET("/", HomeHandler)
+		app.Use(AuthenticateUser)
+		app.Middleware.Skip(AuthenticateUser,
+			HomeHandler,
+		)
+
+		auth := app.Group("/auth")
+		beginAuthHandler := buffalo.WrapHandlerFunc(gothic.BeginAuthHandler)
+		auth.Middleware.Skip(AuthenticateUser,
+			beginAuthHandler,
+			AuthCallback,
+		)
+		auth.GET("/{provider}", beginAuthHandler)
+		auth.GET("/{provider}/callback", AuthCallback)
 
 		app.Resource("/transactions", TransactionsResource{})
-		auth := app.Group("/auth")
-		auth.GET("/{provider}", buffalo.WrapHandlerFunc(gothic.BeginAuthHandler))
-		auth.GET("/{provider}/callback", AuthCallback)
+
 		app.ServeFiles("/", assetsBox) // serve files from the public directory
 	}
 

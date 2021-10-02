@@ -10,9 +10,7 @@
   </div>
 </div>
 
-
-
-<ul class="list-group mb-2 ">
+<ul class="list-group mb-2">
 
 
   <li class="list-group-item pb-1">
@@ -30,8 +28,8 @@
 
 
   <li class="list-group-item pb-1">
-    <label class="small d-block">SpenderID</label>
-    <p class="d-inline-block"><%= transaction.SpenderID %></p>
+    <label class="small d-block">Spent by</label>
+    <p class="d-inline-block"><%= displayName(transaction.Spender) %></p>
   </li>
 
 

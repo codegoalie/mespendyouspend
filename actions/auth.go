@@ -1,11 +1,15 @@
 package actions
 
 import (
+	"crypto/rand"
 	"database/sql"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"mespendyouspend/models"
+	"net/http"
 	"os"
+	"time"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/pop/v5"
@@ -13,6 +17,12 @@ import (
 	"github.com/markbates/goth/gothic"
 	"github.com/markbates/goth/providers/github"
 	"github.com/markbates/goth/providers/google"
+)
+
+const (
+	tokenLength        = 35
+	tokenCookieName    = "mespend-token"
+	tokenValidDuration = 30 * 24 * time.Hour
 )
 
 func init() {
@@ -35,7 +45,7 @@ func AuthCallback(c buffalo.Context) error {
 	err = tx.Where("email = ?", user.Email).First(&spender)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			err = createSpender(tx, user)
+			spender, err = createSpender(tx, user)
 			if err != nil {
 				err = fmt.Errorf("failed to create spender: %w", err)
 				return err
@@ -56,14 +66,42 @@ func AuthCallback(c buffalo.Context) error {
 		}
 	}
 
-	// TODO: Start session?
+	token := GenerateSecureToken(tokenLength)
+	c.Logger().Debug(len(token))
+	err = tx.Create(&models.SpenderToken{
+		SpenderID: spender.ID,
+		Token:     token,
+		ExpiresAt: time.Now().Add(tokenValidDuration),
+	})
+	if err != nil {
+		err = fmt.Errorf("failed to save auth token: %w", err)
+		return err
+	}
+
+	ck := http.Cookie{
+		Name:    tokenCookieName,
+		Value:   token,
+		Path:    "/",
+		Expires: time.Now().Add(tokenValidDuration),
+	}
+	http.SetCookie(c.Response(), &ck)
 
 	return c.Redirect(306, "rootPath()")
 }
 
-func createSpender(tx *pop.Connection, user goth.User) error {
-	return tx.Create(models.Spender{
+func createSpender(tx *pop.Connection, user goth.User) (models.Spender, error) {
+	spender := models.Spender{
 		Email: user.Email,
 		Name:  user.Name,
-	})
+	}
+	err := tx.Create(&spender)
+	return spender, err
+}
+
+func GenerateSecureToken(length int) string {
+	b := make([]byte, length)
+	if _, err := rand.Read(b); err != nil {
+		return ""
+	}
+	return hex.EncodeToString(b)
 }

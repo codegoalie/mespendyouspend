@@ -11,26 +11,22 @@
   <thead class="thead-light">
     <th>Spent on</th>
     <th>Description</th>
-    <th>Amount</th>
-    <th>Spent by</th>
-    <th>&nbsp;</th>
+    <th class="text-right">Amount</th>
   </thead>
   <tbody>
     <%= for (transaction) in transactions { %>
       <tr>
         <td class="align-middle">
-          <%= transaction.CreatedAt.Format("01/02/2006") %>
+          <%= linkTo(editTransactionPath({ transaction_id: transaction.ID })) { %>
+            <%= transaction.CreatedAt.Format("01/02/2006") %>
+          <% } %>
         </td>
-        <td class="align-middle"><%= transaction.Description %></td>
-        <td class="align-middle"><%= transaction.Amount %></td>
-        <td class="align-middle"><%= transaction.Spender.Name %></td>
-        <td>
-          <div class="float-right">
-            <%= linkTo(transactionPath({ transaction_id: transaction.ID }), {class: "btn btn-info", body: "View"}) %>
-            <%= linkTo(editTransactionPath({ transaction_id: transaction.ID }), {class: "btn btn-warning", body: "Edit"}) %>
-            <%= linkTo(transactionPath({ transaction_id: transaction.ID }), {class: "btn btn-danger", "data-method": "DELETE", "data-confirm": "Are you sure?", body: "Destroy"}) %>
-          </div>
+        <td class="align-middle">
+            <%= transaction.Description %>
+          <br/>
+            &mdash; <%= displayName(transaction.Spender) %>
         </td>
+        <td class="align-middle text-right"><%= asCurrency(transaction.Amount) %></td>
       </tr>
     <% } %>
   </tbody>

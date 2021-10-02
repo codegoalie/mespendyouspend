@@ -32,6 +32,22 @@ CREATE TABLE public.schema_migration (
 ALTER TABLE public.schema_migration OWNER TO postgres;
 
 --
+-- Name: spender_tokens; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.spender_tokens (
+    id uuid NOT NULL,
+    spender_id uuid NOT NULL,
+    token character varying(75) NOT NULL,
+    expires_at timestamp without time zone NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.spender_tokens OWNER TO postgres;
+
+--
 -- Name: spenders; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -80,6 +96,14 @@ CREATE TABLE public.users (
 ALTER TABLE public.users OWNER TO postgres;
 
 --
+-- Name: spender_tokens spender_tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.spender_tokens
+    ADD CONSTRAINT spender_tokens_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: spenders spenders_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -108,6 +132,13 @@ ALTER TABLE ONLY public.users
 --
 
 CREATE UNIQUE INDEX schema_migration_version_idx ON public.schema_migration USING btree (version);
+
+
+--
+-- Name: spender_tokens_token_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX spender_tokens_token_idx ON public.spender_tokens USING btree (token);
 
 
 --

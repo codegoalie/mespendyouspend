@@ -73,7 +73,7 @@ func (v TransactionsResource) Show(c buffalo.Context) error {
 	transaction := &models.Transaction{}
 
 	// To find the Transaction the parameter transaction_id is used.
-	if err := tx.Find(transaction, c.Param("transaction_id")); err != nil {
+	if err := tx.EagerPreload("Spender").Find(transaction, c.Param("transaction_id")); err != nil {
 		return c.Error(http.StatusNotFound, err)
 	}
 
@@ -99,7 +99,6 @@ func (v TransactionsResource) New(c buffalo.Context) error {
 // Create adds a Transaction to the DB. This function is mapped to the
 // path POST /transactions
 func (v TransactionsResource) Create(c buffalo.Context) error {
-	// Allocate an empty Transaction
 	transaction := &models.Transaction{}
 
 	// Bind transaction to the html form elements
@@ -112,6 +111,9 @@ func (v TransactionsResource) Create(c buffalo.Context) error {
 	if !ok {
 		return fmt.Errorf("no transaction found")
 	}
+
+	currentSpender := c.Value("currentSpender").(*models.Spender)
+	transaction.SpenderID = currentSpender.ID
 
 	// Validate the data from the html form
 	verrs, err := tx.ValidateAndCreate(transaction)

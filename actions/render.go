@@ -1,6 +1,9 @@
 package actions
 
 import (
+	"mespendyouspend/models"
+
+	"github.com/dustin/go-humanize"
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/packr/v2"
 )
@@ -23,6 +26,20 @@ func init() {
 			// below and import "github.com/gobuffalo/helpers/forms"
 			// forms.FormKey:     forms.Form,
 			// forms.FormForKey:  forms.FormFor,
+			"displayName": displayName,
+			"asCurrency":  asCurrency,
 		},
 	})
+}
+
+func displayName(s models.Spender) string {
+	if s.Name == "" {
+		return s.Email
+	}
+
+	return s.Name
+}
+
+func asCurrency(in int) string {
+	return "$" + humanize.Comma(int64(in))
 }
