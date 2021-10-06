@@ -1,0 +1,1 @@
+add_column("transactions", "spent_on", "date", { default_raw: "CURRENT_TIMESTAMP" })

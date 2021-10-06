@@ -72,7 +72,8 @@ CREATE TABLE public.transactions (
     amount integer NOT NULL,
     spender_id uuid NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    spent_on date DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 

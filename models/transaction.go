@@ -16,6 +16,7 @@ type Transaction struct {
 	Description string    `json:"description" db:"description"`
 	Amount      int       `json:"amount" db:"amount"`
 	SpenderID   uuid.UUID `json:"spender_id" db:"spender_id"`
+	SpentOn     time.Time `json:"spent_on" db:"spent_on"`
 	CreatedAt   time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at" db:"updated_at"`
 

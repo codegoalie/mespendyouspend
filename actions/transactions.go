@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"mespendyouspend/models"
 	"net/http"
+	"time"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/pop/v5"
@@ -36,21 +37,22 @@ func (v TransactionsResource) List(c buffalo.Context) error {
 		return fmt.Errorf("no transaction found")
 	}
 
-	transactions := &models.Transactions{}
+	transactions := models.Transactions{}
 
-	// Paginate results. Params "page" and "per_page" control pagination.
-	// Default values are "page=1" and "per_page=20".
-	q := tx.PaginateFromParams(c.Params())
+	q := tx.Where("spent_on >= ?", weekStart(time.Now()))
 
 	// Retrieve all Transactions from the DB
-	if err := q.EagerPreload("Spender").All(transactions); err != nil {
+	if err := q.EagerPreload("Spender").All(&transactions); err != nil {
 		return err
 	}
 
-	return responder.Wants("html", func(c buffalo.Context) error {
-		// Add the paginator to the context so it can be used in the template.
-		c.Set("pagination", q.Paginator)
+	totalAmount := 0
+	for _, transaction := range transactions {
+		totalAmount += transaction.Amount
+	}
+	c.Set("totalAmount", totalAmount)
 
+	return responder.Wants("html", func(c buffalo.Context) error {
 		c.Set("transactions", transactions)
 		return c.Render(http.StatusOK, r.HTML("/transactions/index.plush.html"))
 	}).Wants("json", func(c buffalo.Context) error {
@@ -254,4 +256,13 @@ func (v TransactionsResource) Destroy(c buffalo.Context) error {
 	}).Wants("xml", func(c buffalo.Context) error {
 		return c.Render(http.StatusOK, r.XML(transaction))
 	}).Respond(c)
+}
+
+func weekStart(in time.Time) time.Time {
+	for {
+		if in.Weekday() == time.Sunday {
+			return in
+		}
+		in = in.AddDate(0, 0, -1)
+	}
 }

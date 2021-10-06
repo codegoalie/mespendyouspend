@@ -30,8 +30,9 @@
       </tr>
     <% } %>
   </tbody>
+  <tfoot>
+    <th></th>
+    <th></th>
+    <th class="text-right"><%= asCurrency(totalAmount) %></th>
+  </tfoot>
 </table>
-
-<div class="text-center">
-  <%= paginator(pagination) %>
-</div>
