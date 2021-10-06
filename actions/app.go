@@ -78,6 +78,9 @@ func App() *buffalo.App {
 
 		app.Resource("/transactions", TransactionsResource{})
 
+		app.GET("/profile", showProfileHandler).Name("profilePath")
+		app.PUT("/profile", updateProfileHandler).Name("updateProfilePath")
+
 		app.ServeFiles("/", assetsBox) // serve files from the public directory
 	}
 

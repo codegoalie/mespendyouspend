@@ -86,7 +86,7 @@ func AuthCallback(c buffalo.Context) error {
 	}
 	http.SetCookie(c.Response(), &ck)
 
-	return c.Redirect(306, "rootPath()")
+	return c.Redirect(http.StatusSeeOther, "rootPath()")
 }
 
 func createSpender(tx *pop.Connection, user goth.User) (models.Spender, error) {

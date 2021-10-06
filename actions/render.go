@@ -32,7 +32,7 @@ func init() {
 	})
 }
 
-func displayName(s models.Spender) string {
+func displayName(s *models.Spender) string {
 	if s.Name == "" {
 		return s.Email
 	}

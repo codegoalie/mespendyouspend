@@ -1,0 +1,9 @@
+<div class="py-4 mb-2">
+  <h3 class="d-inline-block"><%= displayName(currentSpender) %>'s profile</h3>
+</div>
+
+<%= formFor(currentSpender, {action: updateProfilePath(), method: "PUT"}) { %>
+  <%= f.InputTag("Name") %>
+  <button class="btn btn-success" role="submit">Save</button>
+  <%= linkTo(transactionsPath(), {class: "btn btn-warning", "data-confirm": "Are you sure?", body: "Cancel"}) %>
+<% } %>
