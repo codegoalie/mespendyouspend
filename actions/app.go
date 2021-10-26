@@ -73,7 +73,7 @@ func App() *buffalo.App {
 			beginAuthHandler,
 			AuthCallback,
 		)
-		auth.GET("/{provider}", beginAuthHandler)
+		auth.GET("/{provider}", beginAuthHandler).Name("beginAuthPath")
 		auth.GET("/{provider}/callback", AuthCallback)
 
 		app.Resource("/transactions", TransactionsResource{})

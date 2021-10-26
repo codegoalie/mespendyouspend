@@ -1,3 +1,4 @@
-<%= f.InputTag("Description") %>
+<%= f.InputTag("Description", { autofocus: true }) %>
 <%= f.InputTag("Amount") %>
+<%= f.InputTag("SpentOn", { type: "date" }) %>
 <button class="btn btn-success" role="submit">Save</button>

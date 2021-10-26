@@ -28,6 +28,8 @@ type TransactionsResource struct {
 	buffalo.Resource
 }
 
+const goalAmount = 350
+
 // List gets all Transactions. This function is mapped to the path
 // GET /transactions
 func (v TransactionsResource) List(c buffalo.Context) error {
@@ -51,6 +53,7 @@ func (v TransactionsResource) List(c buffalo.Context) error {
 		totalAmount += transaction.Amount
 	}
 	c.Set("totalAmount", totalAmount)
+	c.Set("amountRemaining", goalAmount-totalAmount)
 
 	return responder.Wants("html", func(c buffalo.Context) error {
 		c.Set("transactions", transactions)
@@ -88,7 +91,7 @@ func (v TransactionsResource) Show(c buffalo.Context) error {
 // New renders the form for creating a new Transaction.
 // This function is mapped to the path GET /transactions/new
 func (v TransactionsResource) New(c buffalo.Context) error {
-	c.Set("transaction", &models.Transaction{})
+	c.Set("transaction", &models.Transaction{SpentOn: time.Now()})
 
 	return c.Render(http.StatusOK, r.HTML("/transactions/new.plush.html"))
 }
