@@ -1,6 +1,6 @@
-# Welcome to Buffalo!
+# MeSpendYouSpend
 
-Thank you for choosing Buffalo for your web development needs.
+Track weekly spending with your partner.
 
 ## Database Setup
 
